@@ -1,0 +1,21 @@
+Options All -Indexes
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+
+RewriteRule ^([a-zA-Z0-9/ñÑ-]+)$ index.php?url=$1 [QSA,L]
+
+php_value display_errors 1
+
+<files .htaccess>
+Require all denied
+</files>
+
+<files privada.key>
+Require all denied
+</files>
+
+<files publica.key>
+Require all denied
+</files>
