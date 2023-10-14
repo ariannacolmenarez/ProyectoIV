@@ -57,8 +57,7 @@ class gastosController extends autoload {
     function registrar(){
         
       if (!empty( $_POST["monto"] && $_POST["categoria"] && $_POST["fecha"] && $_POST["hora"] && $_POST['estado'])) {
-        if (preg_match("|^[a-zA-Z0-9]+(\s*[a-zA-Z0-9]*)*[a-zA-Z0-9]+$|", $_POST['nombre'] )&&
-                preg_match("|^[0-9,$]*$|", $_POST['monto'])) {
+       
           $p=new gastosModel();
 
           $p->setmonto($_POST['monto']);
@@ -86,7 +85,7 @@ class gastosController extends autoload {
               $modulo,
               $id);
         }   
-      }
+      
     }
 
     public function eliminar(){

@@ -18,7 +18,17 @@
       public function  listar(){
         $data = '';
 
-        $respuesta = $this->model->listar();
+        if (!isset($_GET['api'])) {
+          $api='';
+        }else{
+            $api=1;
+        }
+
+        $respuesta = $this->model->listar($api);
+        if(isset($_GET["api"])==1){
+          header('Content-Type: application/json');
+          echo json_encode($respuesta);
+        }else{
 
         foreach ($respuesta as $regist) 
         {
@@ -38,6 +48,7 @@
       $data .= '';
 
       echo $data;
+      }
 
       }
 

@@ -105,7 +105,7 @@ class usuariosModel extends Conexion{
     public function guardar(usuariosModel $p){
         try {
            
-            $contraseña= builder::encryct($p->getcontrasena());
+            $contraseña= builder::encriptar($p->getcontrasena());
             $nombre=$p->getnombre();
             $correo=$p->getcorreo();
             $clave=$contraseña;

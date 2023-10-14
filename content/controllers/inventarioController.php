@@ -33,9 +33,25 @@ class inventarioController extends autoload {
 
       $data = '';
 
-      $respuesta = $this->model->listar($_POST['opcion']);
+        if(isset($_POST['opcion']) == ""){
+            $opcion="";
+        }else{
+            $opcion= $_POST['opcion'];
+        }
 
-    	foreach ($respuesta as $regist) {
+        if (!isset($_GET['api'])) {
+            $api='';
+        }else{
+            $api=1;
+        }
+
+      $respuesta = $this->model->listar($opcion,$api);
+        if(isset($_GET["api"])){
+            header('Content-Type: application/json');
+            echo json_encode($respuesta);
+        }else{
+            foreach ($respuesta as $regist) {
+                
                 if ($respuesta->rowCount() > 6) {
                           $data .= '<div class="col p-1 "
                              ';
@@ -78,11 +94,12 @@ class inventarioController extends autoload {
                         </div>
                         </div>';
                 }
-    	};
-
-      $data .= '';
-
-      echo json_encode($data);
+    	    };
+            $data .= '';
+            echo json_encode($data);
+        }
+        
+      
     }
 
     public function  totalProd(){

@@ -259,7 +259,8 @@ class productosModel extends Conexion{
             $estado=0;
             $consulta="UPDATE productos SET estado=? WHERE id=?;";
             $consulta=Conexion::conect()->prepare($consulta);
-            $consulta->bindParam(1, $id, PDO::PARAM_INT);
+            $consulta->bindParam(1, $estado, PDO::PARAM_INT);
+            $consulta->bindParam(2, $id, PDO::PARAM_INT);
             $r = $consulta->execute();
             if($r){
                 $consulta1="SELECT d.id FROM detalles_movimientos as d, productos as p WHERE d.id_producto = p.id and p.id=$id";

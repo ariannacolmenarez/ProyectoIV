@@ -5,6 +5,46 @@
 
     class builder extends Conexion {
 
+    private string $encryptMethod = 'AES-256-CBC';
+    private string $key;
+    private string $iv;
+
+    public function __construct()
+    {
+        $mykey = 'ThisIsASecuredKey';
+        $myiv = 'ThisIsASecuredBlock';
+        $this->key = substr(hash('sha256', $mykey), 0, 32);
+        $this->iv = substr(hash('sha256', $myiv), 0, 16);
+    }
+
+    public static function encrypt(string $value): string
+    {
+        return openssl_encrypt(
+            $value,
+            $this->encryptMethod,
+            $this->key,
+            0,
+            $this->iv
+        );
+    }
+
+    public static function decrypt(string $base64Value): string
+    {
+        return openssl_decrypt(
+            $base64Value,
+            $this->encryptMethod,
+            $this->key,
+            0,
+            $this->iv
+        );
+    }
+
+
+
+
+
+
+
         public static  function duplicados($campo,$tabla,$resultado){
             $sql= "SELECT COUNT(*) FROM $tabla where $campo = '$resultado'";
             $desc=parent::conect()->prepare($sql);
@@ -62,38 +102,38 @@
         return $salida;
     }
 
-    public static function generarKey()
-    {
-        $configargs = array( 
-            'config' => 'C:\xampp\php\extras\openssl\openssl.cnf', 
-            'private_key_bits' => 2048,
-            'default_md' => 'sha256');
+    // public static function generarKey()
+    // {
+    //     $configargs = array( 
+    //         'config' => 'C:\xampp\php\extras\openssl\openssl.cnf', 
+    //         'private_key_bits' => 2048,
+    //         'default_md' => 'sha256');
             
-            $generar=openssl_pkey_new($configargs); // Creación de las dos llaves
+    //         $generar=openssl_pkey_new($configargs); // Creación de las dos llaves
             
-            openssl_pkey_export($generar, $keypriv, NULL, $configargs);// Exporta el contenido de la Ilave privada a la variable $keypriv
+    //         openssl_pkey_export($generar, $keypriv, NULL, $configargs);// Exporta el contenido de la Ilave privada a la variable $keypriv
             
-            $keypub=openssl_pkey_get_details($generar); // Obtiene los detalles de la llave para generar la llave pública
+    //         $keypub=openssl_pkey_get_details($generar); // Obtiene los detalles de la llave para generar la llave pública
             
-            file_put_contents('privada.key',$keypriv); // Crea el archivo .key de la Ilave privada
-            file_put_contents('publica.key',$keypub['key']); // Crea el archivo .key de la llave pública
+    //         file_put_contents('privada.key',$keypriv); // Crea el archivo .key de la Ilave privada
+    //         file_put_contents('publica.key',$keypub['key']); // Crea el archivo .key de la llave pública
 
-    }
+    // }
 
-    public static function encryct($datos)
-    {
-        $Keypublica = openssl_pkey_get_public(file_get_contents('C:\xampp\htdocs\joseViveres\publica.key')); // Extrae el contenido del archivo de la llave pública
-        openssl_public_encrypt($datos, $datos_cifrados, $Keypublica); // Método para cifrar los datos
-        return $datos_cifrados;
-    }
+    // public static function encryct($datos)
+    // {
+    //     $Keypublica = openssl_pkey_get_public(file_get_contents('C:\xampp\htdocs\joseViveres\publica.key')); // Extrae el contenido del archivo de la llave pública
+    //     openssl_public_encrypt($datos, $datos_cifrados, $Keypublica); // Método para cifrar los datos
+    //     return $datos_cifrados;
+    // }
 
-    public static function descryct($datos_cifrados)
-    {
+    // public static function descryct($datos_cifrados)
+    // {
         
-        $Keyprivada = openssl_pkey_get_private(file_get_contents('C:\xampp\htdocs\joseViveres\privada.key')); // Extrae el contenido del archivo de la llave privada
-        openssl_private_decrypt($datos_cifrados, $datos_descifrados, $Keyprivada); // Método para descrifrar los datos
-        return $datos_descifrados;    
-    }
+    //     $Keyprivada = openssl_pkey_get_private(file_get_contents('C:\xampp\htdocs\joseViveres\privada.key')); // Extrae el contenido del archivo de la llave privada
+    //     openssl_private_decrypt($datos_cifrados, $datos_descifrados, $Keyprivada); // Método para descrifrar los datos
+    //     return $datos_descifrados;    
+    // }
 
 
     

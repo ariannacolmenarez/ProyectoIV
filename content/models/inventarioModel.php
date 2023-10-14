@@ -21,17 +21,26 @@ class inventarioModel extends Conexion {
         }
     }
 
-    public function listar($opcion){
+    public function listar($opcion,$api){
         try {
                 if ($opcion != "") {
                     $sql= "SELECT * FROM (SELECT p.id,p.nombre,p.url_img, m.nombre as marca,pp.volumen,pp.unidad_medida,pp.unidades, (SELECT precio_venta FROM ingreso_detalles WHERE id_producto = p.id ORDER BY id DESC LIMIT 1) as precio_venta, (SELECT SUM(cantidad) FROM ingreso_detalles WHERE id_producto=p.id AND estado !=0 ) as cantidad FROM productos as p, marca_producto as m, presentacion_producto as pp,ingreso_detalles as i,ingreso_productos as ig WHERE p.estado !=0 and p.id=i.id_producto AND i.id_ingreso=ig.id AND p.id_marca=m.id AND p.id_presentacion=pp.id and p.id_categoria=$opcion GROUP BY p.id) as productos WHERE cantidad >0";
                 }else{
                     $sql= "SELECT * FROM (SELECT p.id,p.nombre,p.url_img, m.nombre as marca,pp.volumen,pp.unidad_medida,pp.unidades, (SELECT precio_venta FROM ingreso_detalles WHERE id_producto = p.id ORDER BY id DESC LIMIT 1) as precio_venta, (SELECT SUM(cantidad) FROM ingreso_detalles WHERE id_producto=p.id AND estado !=0 ) as cantidad FROM productos as p, marca_producto as m, presentacion_producto as pp,ingreso_detalles as i,ingreso_productos as ig WHERE p.estado !=0 and p.id=i.id_producto AND i.id_ingreso=ig.id AND p.id_marca=m.id AND p.id_presentacion=pp.id GROUP BY p.id) as productos WHERE cantidad >0";
                 }
-                $consulta= Conexion::conect()->prepare($sql);
-                $consulta->setFetchMode(PDO::FETCH_ASSOC);
-                $consulta->execute();
-                return $consulta;
+
+                if ($api == 1) {
+                    $consulta= Conexion::conect()->prepare($sql);
+                    $consulta->execute();
+                    return $consulta->fetchALL(PDO::FETCH_ASSOC);
+                }else{
+                    $consulta= Conexion::conect()->prepare($sql);
+                    $consulta->setFetchMode(PDO::FETCH_ASSOC);
+                    $consulta->execute();
+                    return $consulta;
+                }
+                
+                
                 
 
 

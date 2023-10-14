@@ -28,13 +28,21 @@ class categoriasModel extends Conexion{
         $this->nombre=$nombre;
     }
 
-    public static function listar(){
+    public static function listar($api){
         try {
             $sql= "SELECT * FROM cat_producto WHERE estado !=0";
             $consulta= Conexion::conect()->prepare($sql);
-            $consulta->setFetchMode(PDO::FETCH_ASSOC);
-            $consulta->execute();
-            return $consulta;
+
+            if ($api == 1) {
+                $consulta->execute();
+                return $consulta->fetchALL(PDO::FETCH_ASSOC);
+            }else{
+                $consulta->setFetchMode(PDO::FETCH_ASSOC);
+                $consulta->execute();
+                return $consulta;  
+            }
+
+            
                 
         } catch (Exception $e) {
             die($e->getMessage());
@@ -77,8 +85,8 @@ class categoriasModel extends Conexion{
                 WHERE id= :id;
             ";
             $consulta = Conexion::conect()->prepare($consulta);
-            $consulta->bindParam(':cat', $nombre, PDO::PARAM_STR, 50);
-            $consulta->bindParam(':id', $estado, PDO::PARAM_STR, 5);
+            $consulta->bindParam(':cat', $nombre);
+            $consulta->bindParam(':id', $estado);
             $consulta->execute();
             return 1;
         } catch (Exception $e) {
