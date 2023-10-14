@@ -15,30 +15,30 @@ class loginController extends autoload {
         }
         if($_POST){
             //require_once('content/models/usuariosModel.php');
-            if(isset($_GET['api'])){
-                $iniciar = true;
-                $p = new usuariosModel;
-                $decryptedUser = builder::decrypt($_POST['usuario']);
-                $decryptedPass = builder::decrypt($_POST['pass']);
-                $p->setnombre($decryptedUser);
-                $p->setcontrasena($decryptedPass); 
-                $contrasena = $p->getcontrasena();
-                $resp = $p->verificarUsuario();
-                if($resp){
-                    // $password=builder::desencriptar($resp->clave);
-                    if(!password_verify($contrasena, $resp->clave)){
-                        $mensaje = "La Contraseña es incorrecta";
-                        $iniciar = false;
-                    }
+            // if(isset($_GET['api'])){
+            //     $iniciar = true;
+            //     $p = new usuariosModel;
+            //     $decryptedUser = builder::decrypt($_POST['usuario']);
+            //     $decryptedPass = builder::decrypt($_POST['pass']);
+            //     $p->setnombre($decryptedUser);
+            //     $p->setcontrasena($decryptedPass); 
+            //     $contrasena = $p->getcontrasena();
+            //     $resp = $p->verificarUsuario();
+            //     if($resp){
+            //         // $password=builder::desencriptar($resp->clave);
+            //         if(!password_verify($contrasena, $resp->clave)){
+            //             $mensaje = "La Contraseña es incorrecta";
+            //             $iniciar = false;
+            //         }
                 
-                }
-                else{
-                    echo "El Usuario es incorrecto";
-                }
-                if($iniciar){
-                    echo '1';
-                }
-            }
+            //     }
+            //     else{
+            //         echo "El Usuario es incorrecto";
+            //     }
+            //     if($iniciar){
+            //         echo '1';
+            //     }
+            // }
             $iniciar = true;
             $mensaje = "";
             $p = new usuariosModel;
