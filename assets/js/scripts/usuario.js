@@ -13,20 +13,6 @@ $(document).ready(function() {
         correo: {
             required: true,
             email: true
-        },
-        password2: {
-            required: true,
-            minlength : 5,
-            maxlength: 50
-            },
-        password_conf : {
-            minlength : 5,
-            required: {
-                depends: function(elem) {
-                    return $("#contraseña1").val() != "" || $("#contraseña").val() != ""
-                }
-                },
-            equalTo : "#contraseña1"
         }
         },
         errorElement : 'span'
@@ -218,13 +204,11 @@ function crearUsuario(){
 function registrarUsuarios(){
     var nombre = $("#nombre3").val();
     var correo = $("#correo2").val();
-    var contraseña = $("#contraseña1").val();
     var rol = $("#rol_usuarioR").val();
    
     var parametros = {
         "nombre" : nombre,
         "correo" : correo,
-        "contraseña" : contraseña,
         "rol" : rol
     };
     if ($('#userform').valid()) {

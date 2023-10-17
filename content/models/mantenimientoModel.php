@@ -8,6 +8,87 @@ class mantenimientoModel extends Conexion{
 	public function __construct(){
 		parent::conect();
 	}
+    public function respaldo_automatico(){
+        $host = 'localhost';
+$usuario = 'root';
+$contrasena = '';
+$base_de_datos = 'joseviveresbd';
+
+try {
+    // Crear una instancia de PDO y establecer la conexión
+    $conexion = new PDO("mysql:host=$host;dbname=$base_de_datos", $usuario, $contrasena);
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Carpeta donde se guardarán los archivos de respaldo
+    $carpeta_respaldos = 'C:/xampp/htdocs/joseviveres/database/respaldo_automatico/';
+
+    // Crear la carpeta si no existe
+    if (!is_dir($carpeta_respaldos)) {
+        mkdir($carpeta_respaldos);
+    }
+
+    // Consulta para obtener la lista de tablas en la base de datos
+    $consulta_tablas = "SHOW TABLES";
+    $resultado_tablas = $conexion->query($consulta_tablas);
+
+    // Iterar a través de las tablas y guardarlas en archivos separados
+    while ($fila = $resultado_tablas->fetch(PDO::FETCH_ASSOC)) {
+        $nombre_tabla = $fila['Tables_in_joseviveresbd'];
+        $archivo_respaldo = $carpeta_respaldos . $nombre_tabla . '.sql';
+
+        // Consulta para obtener la estructura de la tabla
+        $consulta_estructura = "SHOW CREATE TABLE $nombre_tabla";
+        $resultado_estructura = $conexion->query($consulta_estructura);
+        $fila_estructura = $resultado_estructura->fetch(PDO::FETCH_ASSOC);
+        $estructura_tabla = $fila_estructura['Create Table'];
+
+        // Consulta para obtener los datos de la tabla
+        $consulta_datos = "SELECT * FROM $nombre_tabla";
+        $resultado_datos = $conexion->query($consulta_datos);
+
+        // Crear una huella digital de la estructura y datos
+        $huella_digital_nueva = md5($estructura_tabla);
+        while ($fila_datos = $resultado_datos->fetch(PDO::FETCH_ASSOC)) {
+            $linea_datos = implode(", ", array_map(function($valor) use ($conexion) {
+                return "'" . $conexion->quote($valor) . "'";
+            }, $fila_datos));
+            $huella_digital_nueva .= md5($linea_datos);
+        }
+
+        // Comprobar si el archivo ya existe localmente
+        if (file_exists($archivo_respaldo)) {
+            // Obtener la huella digital anterior
+            $huella_digital_anterior = file_get_contents($archivo_respaldo . '.md5');
+
+            // Comprobar si las huellas digitales son idénticas
+            if ($huella_digital_anterior === $huella_digital_nueva) {
+                continue; // No reemplazar si las huellas digitales son iguales
+            }
+        }
+
+        // Guardar la estructura y los datos en el archivo de respaldo
+        file_put_contents($archivo_respaldo, $estructura_tabla);
+
+        $resultado_datos = $conexion->query($consulta_datos); // Reiniciar el resultado de datos
+        while ($fila_datos = $resultado_datos->fetch(PDO::FETCH_ASSOC)) {
+            $linea_datos = implode(", ", array_map(function($valor) use ($conexion) {
+                return "'" . $conexion->quote($valor) . "'";
+            }, $fila_datos));
+            file_put_contents($archivo_respaldo, "INSERT INTO $nombre_tabla VALUES ($linea_datos);" . PHP_EOL, FILE_APPEND);
+        }
+
+        // Guardar la nueva huella digital
+        file_put_contents($archivo_respaldo . '.md5', $huella_digital_nueva);
+    }
+
+    // Cerrar la conexión a la base de datos
+    $conexion = null;
+
+    echo "Respaldo completo realizado con éxito.";
+} catch (PDOException $e) {
+    echo "Error de conexión: " . $e->getMessage();
+}
+    }
 
     public function respaldo(){
 	 	$dir = "database/";

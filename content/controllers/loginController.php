@@ -49,10 +49,22 @@ class loginController extends autoload {
             
             if($resp){
                 // $password=builder::desencriptar($resp->clave);
-                if(!password_verify($contrasena, $resp->clave)){
-                    $mensaje = "La Contraseña es incorrecta";
+                if($resp->intentos < 4){
+                    if(!password_verify($contrasena, $resp->clave)){
+                        if($resp->intentos == 4){
+                            $mensaje = "El usuario se ha bloqueado bloqueado";
+                            $iniciar = false;
+                        }else{
+                            $mensaje = "La contraseña es incorrecta. Intentos:" . $p->intentos($resp->intentos, $_POST['usuario']) ;
+                            $iniciar = false;
+                        }
+                       
+                    }
+                }else{
+                    $mensaje = "El usuario se está bloqueado bloqueado";
                     $iniciar = false;
                 }
+                
             
             }
             else{
@@ -60,15 +72,38 @@ class loginController extends autoload {
                 $iniciar = false;
             }
             if($iniciar){
-                //require_once('content/models/seguridadModel.php');
-                $r = new seguridadModel;
-                $permisos = $r->obtenerPermisos($resp->id_rol);
-                $_SESSION['id_usuario'] = $resp->id;
-                $_SESSION['usuario'] = $resp->nombre;
-                $_SESSION['correo'] = $resp->correo;
-                $_SESSION['permisos'] = $permisos;
-                $_SESSION['rol'] = $resp->id_rol;
-                header("location:"._DIRECTORY_."balance");
+                $p->intentosCero($_POST['usuario']);
+                if($resp->estado == 3){
+                    $r = new seguridadModel;
+                    $permisos = $r->obtenerPermisos($resp->id_rol);
+                    $_SESSION['id_usuario'] = $resp->id;
+                    $_SESSION['usuario'] = $resp->nombre;
+                    $_SESSION['correo'] = $resp->correo;
+                    $_SESSION['permisos'] = $permisos;
+                    $_SESSION['rol'] = $resp->id_rol;
+                    header("location:"._DIRECTORY_."preguntaSeguridad");
+                    
+                }if($resp->estado == 2){
+                    $r = new seguridadModel;
+                    $permisos = $r->obtenerPermisos($resp->id_rol);
+                    $_SESSION['id_usuario'] = $resp->id;
+                    $_SESSION['usuario'] = $resp->nombre;
+                    $_SESSION['correo'] = $resp->correo;
+                    $_SESSION['permisos'] = $permisos;
+                    $_SESSION['rol'] = $resp->id_rol;
+                    header("location:"._DIRECTORY_."cambioPass");
+                    
+                }if($resp->estado == 1){
+                    $r = new seguridadModel;
+                    $permisos = $r->obtenerPermisos($resp->id_rol);
+                    $_SESSION['id_usuario'] = $resp->id;
+                    $_SESSION['usuario'] = $resp->nombre;
+                    $_SESSION['correo'] = $resp->correo;
+                    $_SESSION['permisos'] = $permisos;
+                    $_SESSION['rol'] = $resp->id_rol;
+                    header("location:"._DIRECTORY_."balance");
+                }
+                
             }
             else{
                 $data['page_tag'] = "Login | Market MP";

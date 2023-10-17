@@ -96,14 +96,7 @@
                 <div class="input-group mt-1">
                   <input type="text" class="form-control d-block w-100" id="correo2" name="correo" data-bs-whatever="@gmail" >
                 </div>
-                <h5 class="mt-3">contraseña *</h5>
-                <div class="input-group mt-1">
-                  <input type="password" value="" class="form-control d-block w-100" name="password2" id="contraseña1">
-                </div>
-                <h5 class="mt-3">Confirmar contraseña *</h5>
-                <div class="input-group mt-1">
-                  <input type="password" value="" class="form-control d-block w-100" name="password_conf" id="contraseña2">
-                </div>
+                
                 <h5 class="mt-3">Rol de usuario*</h5>
                 <div class="input-group mt-1">
                   <select class="form-select d-block w-100  rounded-0" name="rol" id="rol_usuarioR">

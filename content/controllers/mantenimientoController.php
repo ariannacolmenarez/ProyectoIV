@@ -34,6 +34,19 @@
 				$id);
 			//header("location:"._DIRECTORY_."mantenimiento");
 		}
+		public function respaldoAutomatico(){
+			$this->model->respaldo_automatico();
+			$fecha=date('Y-m-d');
+			$accion='Se realizo un respaldo automatico de la BASE DE DATOS ';
+			$modulo='Mantenimiento';
+			$id=$_SESSION['id_usuario'];
+			$this->bitacora->insertar(
+				$fecha,
+				$accion,
+				$modulo,
+				$id);
+			
+		}
 
 		public function form(){
 			

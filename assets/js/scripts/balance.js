@@ -15,7 +15,57 @@ var toastMixin = Swal.mixin({
     }
   });
 
-$(document).ready(function() {  
+$(document).ready(function() { 
+   
+    // Recuperar la fecha almacenada en localStorage
+    var fechaAlmacenada = localStorage.getItem('miVariableFecha');
+    if (fechaAlmacenada) {
+        // Convertir la cadena de fecha almacenada en un objeto de fecha
+        var fechaAlmacenadaObjeto = new Date(fechaAlmacenada);
+        // Obtener la fecha actual
+        var fechaActual = new Date();
+
+        // Comparar las fechas
+        if (fechaAlmacenadaObjeto.toDateString() !== fechaActual.toDateString()) {
+            // La fecha almacenada es menor a la fecha actual, por lo que la actualizamos
+            localStorage.setItem('miVariableFecha', fechaActual.toISOString());
+            $.ajax({
+                url:   'mantenimiento/respaldoAutomatico',
+                type:  'POST',
+                success:  function (response) { 
+                    console.log(response);
+                    toastMixin.fire({
+                        animation: true,
+                        title: 'Base de dato verificada'
+                    });
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            }); 
+        } else {
+            console.log("Es el mismo día");
+        }
+    } else {
+        // Si es la primera vez, almacenar la fecha actual como una cadena
+        localStorage.setItem('miVariableFecha', new Date().toISOString());
+        $.ajax({
+            url:   'mantenimiento/respaldoAutomatico',
+            type:  'POST',
+            success:  function (response) { 
+                console.log(response);
+                toastMixin.fire({
+                    animation: true,
+                    title: 'Base de dato verificada'
+                });
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        }); 
+    }
+
+    
     listarIngresos($("#fechas").val()); 
     listarEgresos($("#fechas").val());
     totalIngreso($("#fechas").val(),1);
