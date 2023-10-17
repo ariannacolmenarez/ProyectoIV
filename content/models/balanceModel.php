@@ -9,7 +9,7 @@ class balanceModel extends Conexion {
         parent::conect();
     }
 
-    public function listar($fecha){
+    public function listar($fecha,$api){
         try {   
             if ($fecha == "d") {
 
@@ -65,9 +65,14 @@ class balanceModel extends Conexion {
             }
 
                 $consulta= Conexion::conect()->prepare($sql);
+            if ($api == 1) {
+                $consulta->execute();
+                return $consulta->fetchALL(PDO::FETCH_ASSOC);
+            }else {
                 $consulta->setFetchMode(PDO::FETCH_ASSOC);
                 $consulta->execute();
                 return $consulta;
+            }
 
 
         } catch (Exception $e) {
@@ -75,7 +80,7 @@ class balanceModel extends Conexion {
         }
     }
 
-    public function listarEgresos($fecha){
+    public function listarEgresos($fecha,$api){
         try {
             if ($fecha == "d") {
 
@@ -126,11 +131,15 @@ class balanceModel extends Conexion {
 
             }
 
-                $consulta= Conexion::conect()->prepare($sql);
+                    $consulta= Conexion::conect()->prepare($sql);
+            if ($api == 1) {
+                $consulta->execute();
+                return $consulta->fetchALL(PDO::FETCH_ASSOC);
+            }else {
                 $consulta->setFetchMode(PDO::FETCH_ASSOC);
                 $consulta->execute();
                 return $consulta;
-                
+            }
 
 
         } catch (Exception $e) {
@@ -235,7 +244,7 @@ class balanceModel extends Conexion {
                 ini_set('date.timezone','America/Caracas');
                 $date = date("Y-m-d"); 
 
-                $sql= "SELECT SUM(total) FROM ( SELECT m.id, m.fecha, m.hora,m.total,mp.nombre, c.categoria FROM movimientos as
+                $sql= "SELECT SUM(total) as total FROM ( SELECT m.id, m.fecha, m.hora,m.total,mp.nombre, c.categoria FROM movimientos as
                 m, metodo_pago as mp, concepto_movimiento as c WHERE m.estado !=0 AND m.estado_movimiento ='PAGADA'
                 AND m.id_concepto_movimiento $operador 1 AND m.id_metodo_pago=mp.id AND m.id_concepto_movimiento = c.id AND m.fecha = '$date') as monto";
             

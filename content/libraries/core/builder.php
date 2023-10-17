@@ -4,46 +4,7 @@
     use PDO;
 
     class builder extends Conexion {
-
-    // private string $encryptMethod = 'AES-256-CBC';
-    // private string $key;
-    // private string $iv;
-
-    // public function __construct()
-    // {
-    //     $mykey = 'ThisIsASecuredKey';
-    //     $myiv = 'ThisIsASecuredBlock';
-    //     $this->key = substr(hash('sha256', $mykey), 0, 32);
-    //     $this->iv = substr(hash('sha256', $myiv), 0, 16);
-    // }
-
-    // public static function encrypt(string $value): string
-    // {
-    //     return openssl_encrypt(
-    //         $value,
-    //         $this->encryptMethod,
-    //         $this->key,
-    //         0,
-    //         $this->iv
-    //     );
-    // }
-
-    // public static function decrypt(string $base64Value): string
-    // {
-    //     return openssl_decrypt(
-    //         $base64Value,
-    //         $this->encryptMethod,
-    //         $this->key,
-    //         0,
-    //         $this->iv
-    //     );
-    // }
-
-
-
-
-
-
+    
 
         public static  function duplicados($campo,$tabla,$resultado){
             $sql= "SELECT COUNT(*) FROM $tabla where $campo = '$resultado'";
@@ -102,6 +63,22 @@
         return $salida;
     }
 
+    // public static function encryct($datos)
+    // {
+    //     $Keypublica = openssl_pkey_get_public(file_get_contents('https://joseviveresmarket.000webhostapp.com/publica.key')); // Extrae el contenido del archivo de la llave pública
+    //     openssl_public_encrypt($datos, $datos_cifrados, $Keypublica); // Método para cifrar los datos
+    //     return $datos_cifrados;
+    // }
+
+    // public static function descryct($datos_cifrados)
+    // {
+        
+    //     $Keyprivada = openssl_pkey_get_private(file_get_contents('https://joseviveresmarket.000webhostapp.com/privada.key')); // Extrae el contenido del archivo de la llave privada
+    //     openssl_private_decrypt($datos_cifrados, $datos_descifrados, $Keyprivada); // Método para descrifrar los datos
+    //     return $datos_descifrados;    
+    // }
+
+
     // public static function generarKey()
     // {
     //     $configargs = array( 
@@ -120,23 +97,6 @@
 
     // }
 
-    // public static function encryct($datos)
-    // {
-    //     $Keypublica = openssl_pkey_get_public(file_get_contents('C:\xampp\htdocs\joseViveres\publica.key')); // Extrae el contenido del archivo de la llave pública
-    //     openssl_public_encrypt($datos, $datos_cifrados, $Keypublica); // Método para cifrar los datos
-    //     return $datos_cifrados;
-    // }
-
-    // public static function descryct($datos_cifrados)
-    // {
-        
-    //     $Keyprivada = openssl_pkey_get_private(file_get_contents('C:\xampp\htdocs\joseViveres\privada.key')); // Extrae el contenido del archivo de la llave privada
-    //     openssl_private_decrypt($datos_cifrados, $datos_descifrados, $Keyprivada); // Método para descrifrar los datos
-    //     return $datos_descifrados;    
-    // }
-
-
-    
     }
 
 ?>

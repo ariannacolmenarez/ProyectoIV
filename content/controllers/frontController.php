@@ -9,7 +9,9 @@ use content\config\settings\SysConfig;
 			preg_match_all('/^[a-zA-Z0-9-@\/.=:_#$ ]{1,700}$/',$url,
 			$salida, PREG_PATTERN_ORDER);
 			$pos = strpos($url, "recuperar");
-			if(!empty($_SESSION['usuario']) || $pos !== false || $_GET['api']=1 ){	
+			$api = strpos($url, "api");
+			
+			if(!empty($_SESSION['usuario']) || $pos !== false || $api !== false ){	
 				
 				if(!empty($salida[0][0])){
 					

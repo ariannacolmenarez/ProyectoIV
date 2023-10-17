@@ -30,6 +30,7 @@ class inventarioModel extends Conexion {
                 }
 
                 if ($api == 1) {
+                    
                     $consulta= Conexion::conect()->prepare($sql);
                     $consulta->execute();
                     return $consulta->fetchALL(PDO::FETCH_ASSOC);
@@ -39,9 +40,6 @@ class inventarioModel extends Conexion {
                     $consulta->execute();
                     return $consulta;
                 }
-                
-                
-                
 
 
         } catch (Exception $e) {

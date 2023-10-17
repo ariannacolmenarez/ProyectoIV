@@ -41,8 +41,6 @@ class categoriasModel extends Conexion{
                 $consulta->execute();
                 return $consulta;  
             }
-
-            
                 
         } catch (Exception $e) {
             die($e->getMessage());
@@ -85,8 +83,8 @@ class categoriasModel extends Conexion{
                 WHERE id= :id;
             ";
             $consulta = Conexion::conect()->prepare($consulta);
-            $consulta->bindParam(':cat', $nombre);
-            $consulta->bindParam(':id', $estado);
+            $consulta->bindParam(':cat', $nombre, PDO::PARAM_STR, 50);
+            $consulta->bindParam(':id', $estado, PDO::PARAM_STR, 5);
             $consulta->execute();
             return 1;
         } catch (Exception $e) {

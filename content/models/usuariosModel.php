@@ -105,17 +105,19 @@ class usuariosModel extends Conexion{
     public function guardar(usuariosModel $p){
         try {
            
-            $contraseña= builder::encriptar($p->getcontrasena());
+            $contraseña= builder::encryct($p->getcontrasena());
             $nombre=$p->getnombre();
             $correo=$p->getcorreo();
             $clave=$contraseña;
             $rol=$p->getrol_usuario();
             $id= $p->getid();
+            $estado="1";
             
                 $consulta="UPDATE usuarios SET 
                     nombre=:nombre,
                     correo=:correo,
                     clave=:clave,
+                    estado=:estado,
                     id_rol=:rol
                     WHERE id=:id;
                 
@@ -125,6 +127,7 @@ class usuariosModel extends Conexion{
                 $consulta->bindParam(':correo', $correo, PDO::PARAM_STR);
                 $consulta->bindParam(':clave', $clave, PDO::PARAM_STR);
                 $consulta->bindParam(':rol', $rol, PDO::PARAM_INT);
+                $consulta->bindParam(':estado', $estado, PDO::PARAM_STR, 5);
                 $consulta->bindParam(':id', $id, PDO::PARAM_INT);
                 $consulta->execute();
                 return true;
@@ -142,7 +145,7 @@ class usuariosModel extends Conexion{
             $contraseña= builder::encriptar($p->getcontrasena());
             $clave=$contraseña;
             $rol=$p->getrol_usuario();
-            $estado="3";
+            $estado="1";
             if( builder::duplicados("correo","usuarios","$correo") === false ||
             builder::duplicados("nombre","usuarios","$nombre") === false ){
                 return 0;
@@ -208,32 +211,7 @@ class usuariosModel extends Conexion{
             die($e->getMessage());
         }
     }
-    public function intentos($intentos , $nombre){
-        $nombre = $nombre;
-        $intentos = $intentos + 1;
-        
-        
-        $consulta="UPDATE usuarios SET intentos=:intentos WHERE nombre=:nombre;";
-        $consulta=Conexion::conect()->prepare($consulta);
-        $consulta->bindParam(':intentos', $intentos, PDO::PARAM_STR);
-        $consulta->bindParam(':nombre', $nombre, PDO::PARAM_INT);
-        $consulta->execute();
-        return $intentos;
 
-    }
-    public function intentosCero($nombre){
-        $nombre = $nombre;
-        $intentos = 0;
-        
-        
-        $consulta="UPDATE usuarios SET intentos=:intentos WHERE nombre=:nombre;";
-        $consulta=Conexion::conect()->prepare($consulta);
-        $consulta->bindParam(':intentos', $intentos, PDO::PARAM_STR);
-        $consulta->bindParam(':nombre', $nombre, PDO::PARAM_INT);
-        $consulta->execute();
-        return $intentos;
-
-    }
     public function verificarUsuario(){
         try {
             $nombre = $this->nombre;

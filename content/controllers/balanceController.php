@@ -35,7 +35,7 @@ class balanceController extends autoload {
               </thead>
               <tbody>';
         
-        $respuesta = $this->model->listar($_POST['fecha']);
+        $respuesta = $this->model->listar($_POST['fecha'],0);
   
           foreach ($respuesta as $regist) {
             if(in_array("Consultar Ventas", $_SESSION['permisos'])){
@@ -97,7 +97,7 @@ class balanceController extends autoload {
               </thead>
               <tbody>';
   
-        $respuesta = $this->model->listarEgresos($_POST['fecha']);
+        $respuesta = $this->model->listarEgresos($_POST['fecha'],0);
         
           foreach ($respuesta as $regist) {
             if(in_array("Consultar Gastos", $_SESSION['permisos'])){
@@ -136,10 +136,10 @@ class balanceController extends autoload {
 
     public function totales(){
         $respuesta = $this->model->totales($_POST['fecha'],$_POST['data']);
-        if ($respuesta["SUM(total)"] == NULL) {
+        if ($respuesta["total"] == NULL) {
           echo 0;
         }else {
-          echo $respuesta["SUM(total)"];
+          echo $respuesta["total"];
         }
     }
 

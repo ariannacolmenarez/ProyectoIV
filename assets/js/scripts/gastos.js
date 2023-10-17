@@ -134,7 +134,7 @@ function registrarGasto(){
                             animation: true,
                             title: 'Gasto Registrado'
                         });
-                        //window.location.reload();  
+                        window.location.reload();  
                     },error: (response) => {
                         console.log(response);
                     }
@@ -153,7 +153,7 @@ function registrarGasto(){
                         animation: true,
                         title: 'Gasto Registrado'
                     });
-                    //window.location.reload();  
+                    window.location.reload();  
                 },error: (response) => {
                     console.log(response);
                 }

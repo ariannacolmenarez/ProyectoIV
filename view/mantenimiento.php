@@ -39,7 +39,6 @@
             </div>
             <hr>
             <div class="row w-75 m-auto">
-            
             <div class="card">
                 <div class="card-body">
                     <div class="row align-center">

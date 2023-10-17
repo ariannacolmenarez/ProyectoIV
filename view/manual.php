@@ -7,7 +7,7 @@
     <title>manual</title>
     <!-- plugins:css -->
     <?php
-    $directory= "http://localhost/joseViveres/";
+    $directory= "https://joseviveresmarket.000webhostapp.com/";
     
     ?>
   <link rel="stylesheet" href="<?php echo $directory?>assets/ti-icons/css/themify-icons.css">

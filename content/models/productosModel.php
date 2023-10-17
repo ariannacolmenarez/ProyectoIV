@@ -216,12 +216,12 @@ class productosModel extends Conexion{
                 WHERE id=:id;
             ";
             $consulta=Conexion::conect()->prepare($consulta);
-            $consulta->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-            $consulta->bindParam(':descr', $descripcion, PDO::PARAM_STR);
-            $consulta->bindParam(':estado', $estado, PDO::PARAM_STR);
-            $consulta->bindParam(':cat', $cat, PDO::PARAM_INT);
-            $consulta->bindParam(':marca', $marca, PDO::PARAM_INT);
-            $consulta->bindParam(':presen', $presentacion, PDO::PARAM_INT);
+            $consulta->bindParam(':nombre', $nombre);
+            $consulta->bindParam(':descr', $descripcion);
+            $consulta->bindParam(':estado', $estado);
+            $consulta->bindParam(':cat', $cat);
+            $consulta->bindParam(':marca', $marca);
+            $consulta->bindParam(':presen', $presentacion);
             $consulta->bindParam(':id', $id, PDO::PARAM_INT);
             $consulta->execute();
             } else {
@@ -233,16 +233,16 @@ class productosModel extends Conexion{
                 id_marca=:marca,
                 id_presentacion=:presen,
                 url_img = :urlimg
-                WHERE id=?;
+                WHERE id= :id;
             ";
             Conexion::conect()->prepare($consulta);
-            $consulta->bindParam(':nombre', $nombre, PDO::PARAM_STR);
-            $consulta->bindParam(':descr', $descripcion, PDO::PARAM_STR);
-            $consulta->bindParam(':urlimg', $url, PDO::PARAM_STR);
-            $consulta->bindParam(':estado', $estado, PDO::PARAM_STR);
-            $consulta->bindParam(':cat', $cat, PDO::PARAM_INT);
-            $consulta->bindParam(':marca', $marca, PDO::PARAM_INT);
-            $consulta->bindParam(':presen', $presentacion, PDO::PARAM_INT);
+            $consulta->bindParam(':nombre', $nombre,PDO::PARAM_STR);
+            $consulta->bindParam(':descr', $descripcion);
+            $consulta->bindParam(':estado', $estado);
+            $consulta->bindParam(':cat', $cat);
+            $consulta->bindParam(':marca', $marca);
+            $consulta->bindParam(':presen', $presentacion);
+            $consulta->bindParam(':urlimg', $url);
             $consulta->bindParam(':id', $id, PDO::PARAM_INT);
             $consulta->execute();
             }

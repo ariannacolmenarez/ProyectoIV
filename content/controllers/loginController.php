@@ -4,6 +4,7 @@ use content\libraries\core\autoload;
 use content\models\usuariosModel;
 use content\models\seguridadModel;
 use content\libraries\core\builder;
+use content\libraries\core\Encryption;
 
 class loginController extends autoload {
     
@@ -15,30 +16,34 @@ class loginController extends autoload {
         }
         if($_POST){
             //require_once('content/models/usuariosModel.php');
-            // if(isset($_GET['api'])){
-            //     $iniciar = true;
-            //     $p = new usuariosModel;
-            //     $decryptedUser = builder::decrypt($_POST['usuario']);
-            //     $decryptedPass = builder::decrypt($_POST['pass']);
-            //     $p->setnombre($decryptedUser);
-            //     $p->setcontrasena($decryptedPass); 
-            //     $contrasena = $p->getcontrasena();
-            //     $resp = $p->verificarUsuario();
-            //     if($resp){
-            //         // $password=builder::desencriptar($resp->clave);
-            //         if(!password_verify($contrasena, $resp->clave)){
-            //             $mensaje = "La Contraseña es incorrecta";
-            //             $iniciar = false;
-            //         }
+            if(isset($_GET['api'])){
+                $encryption = new Encryption();
+                $iniciar = true;
+                $p = new usuariosModel;
+                //$encryption->enviarKeyPub();
+                // echo $_POST['usuario'];
+                $decryptedUser = $encryption->decrypt($_POST['usuario']);
+                $decryptedPass = $encryption->decrypt($_POST['pass']);
+                $p->setnombre($decryptedUser);
+                $p->setcontrasena($decryptedPass);  
+                $contrasena = $p->getcontrasena();
+                $resp = $p->verificarUsuario();
+                if($resp){
+                    if(!password_verify($contrasena, $resp->clave)){
+                    $mensaje = "La Contraseña es incorrecta";
+                    $iniciar = false;
+                }
+                    
+                }
+                else{
+                    echo "usuario incorrecto";
+                    $iniciar = false;
+                }
+                if($iniciar){
+                    echo 1;
+                }
                 
-            //     }
-            //     else{
-            //         echo "El Usuario es incorrecto";
-            //     }
-            //     if($iniciar){
-            //         echo '1';
-            //     }
-            // }
+            }else{
             $iniciar = true;
             $mensaje = "";
             $p = new usuariosModel;
@@ -48,23 +53,10 @@ class loginController extends autoload {
             $resp = $p->verificarUsuario();
             
             if($resp){
-                // $password=builder::desencriptar($resp->clave);
-                if($resp->intentos < 4){
-                    if(!password_verify($contrasena, $resp->clave)){
-                        if($resp->intentos == 4){
-                            $mensaje = "El usuario se ha bloqueado bloqueado";
-                            $iniciar = false;
-                        }else{
-                            $mensaje = "La contraseña es incorrecta. Intentos:" . $p->intentos($resp->intentos, $_POST['usuario']) ;
-                            $iniciar = false;
-                        }
-                       
-                    }
-                }else{
-                    $mensaje = "El usuario se está bloqueado bloqueado";
+                if(!password_verify($contrasena, $resp->clave)){
+                    $mensaje = "La Contraseña es incorrecta";
                     $iniciar = false;
                 }
-                
             
             }
             else{
@@ -72,38 +64,15 @@ class loginController extends autoload {
                 $iniciar = false;
             }
             if($iniciar){
-                $p->intentosCero($_POST['usuario']);
-                if($resp->estado == 3){
-                    $r = new seguridadModel;
-                    $permisos = $r->obtenerPermisos($resp->id_rol);
-                    $_SESSION['id_usuario'] = $resp->id;
-                    $_SESSION['usuario'] = $resp->nombre;
-                    $_SESSION['correo'] = $resp->correo;
-                    $_SESSION['permisos'] = $permisos;
-                    $_SESSION['rol'] = $resp->id_rol;
-                    header("location:"._DIRECTORY_."preguntaSeguridad");
-                    
-                }if($resp->estado == 2){
-                    $r = new seguridadModel;
-                    $permisos = $r->obtenerPermisos($resp->id_rol);
-                    $_SESSION['id_usuario'] = $resp->id;
-                    $_SESSION['usuario'] = $resp->nombre;
-                    $_SESSION['correo'] = $resp->correo;
-                    $_SESSION['permisos'] = $permisos;
-                    $_SESSION['rol'] = $resp->id_rol;
-                    header("location:"._DIRECTORY_."cambioPass");
-                    
-                }if($resp->estado == 1){
-                    $r = new seguridadModel;
-                    $permisos = $r->obtenerPermisos($resp->id_rol);
-                    $_SESSION['id_usuario'] = $resp->id;
-                    $_SESSION['usuario'] = $resp->nombre;
-                    $_SESSION['correo'] = $resp->correo;
-                    $_SESSION['permisos'] = $permisos;
-                    $_SESSION['rol'] = $resp->id_rol;
-                    header("location:"._DIRECTORY_."balance");
-                }
-                
+                //require_once('content/models/seguridadModel.php');
+                $r = new seguridadModel;
+                $permisos = $r->obtenerPermisos($resp->id_rol);
+                $_SESSION['id_usuario'] = $resp->id;
+                $_SESSION['usuario'] = $resp->nombre;
+                $_SESSION['correo'] = $resp->correo;
+                $_SESSION['permisos'] = $permisos;
+                $_SESSION['rol'] = $resp->id_rol;
+                header("location:"._DIRECTORY_."balance");
             }
             else{
                 $data['page_tag'] = "Login | Market MP";
@@ -111,6 +80,7 @@ class loginController extends autoload {
                 $data['message'] = $mensaje;
                 parent::getView("login", $data);
             }
+        }
         }
         else{
             $data['page_tag'] = "Login | Market MP";

@@ -139,7 +139,6 @@ class gastosModel extends Conexion{
     }
 
     public function registrar(gastosModel $p){
-        
         try {
             $nombre=$p->getnombre();
             $total=$p->getmonto();
@@ -177,7 +176,6 @@ class gastosModel extends Conexion{
             $consulta->bindParam(10, $usuario, PDO::PARAM_INT);
             $consulta->execute();
             return 1;
-            var_dump('hola'); 
 
         } catch (Exception $e) {
 

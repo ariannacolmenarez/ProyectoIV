@@ -23,7 +23,6 @@ $.extend( $.validator.messages, {
 	digits: "Por favor, escribe sólo dígitos.",
 	creditcard: "Por favor, escribe un número de tarjeta válido.",
 	equalTo: "Por favor, escribe el mismo valor de nuevo.",
-	notEqualTo: "Deben ser distintas",
 	extension: "Por favor, escribe un valor con una extensión aceptada.",
 	maxlength: $.validator.format( "Por favor, no escribas más de {0} caracteres." ),
 	minlength: $.validator.format( "Por favor, no escribas menos de {0} caracteres." ),

@@ -124,13 +124,13 @@ class usuariosController extends autoload {
 
     public function registrar(){
         if (!empty( $_POST['nombre'] && $_POST['correo'] && $_POST['rol'])) {
-            if (preg_match("|^[a-zA-Z0-9]+(\s*[a-zA-Z0-9]*)*[a-zA-Z0-9]+$|", $_POST['nombre'] ) &&
+            if (preg_match("|^[a-zA-Z0-9]+(\s*[a-zA-Z0-9]*)*[a-zA-Z0-9]+$|", $_POST['nombre'] ) && preg_match("|^[a-zA-Z0-9]+(\s*[a-zA-Z0-9]*)*[a-zA-Z0-9]+$|", $_POST['contraseña'] ) &&
             preg_match("|^[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}+$|", $_POST['correo'] )) {
                 $p=new usuariosModel();
 
                 $p->setnombre(strtoupper($_POST['nombre']));
                 $p->setcorreo($_POST['correo']);
-                $p->setcontrasena($_POST['nombre']);
+                $p->setcontrasena($_POST['contraseña']);
                 $p->setrol_usuario($_POST['rol']);
 
                 $resp=$this->model->registrar($p);

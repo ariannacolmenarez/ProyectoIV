@@ -20,35 +20,6 @@ function validacion(tipo,titulo,texto){
         text: texto,
       })
 }
-$("#respaldo_automatico").on("click",function(e){
-    e.preventDefault();
-    Swal.fire({
-    title: '¿Estas seguro que deseas Crear un respaldo?',
-    icon: "warning",
-    showDenyButton: true,
-    confirmButtonText: 'Guardar',
-    denyButtonText: `No Guardar`,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url:   'mantenimiento/respaldoAutomatico', //archivo que recibe la peticion
-                type:  'POST', //método de envio
-                success:  function (response) { 
-                    console.log(response);
-                    toastMixin.fire({
-                        animation: true,
-                        title: 'Base de Datos Respaldada'
-                    });
-                },
-                error: (response) => {
-                    console.log(response);
-                }
-            })
-        } else if (result.isDenied) {
-            Swal.fire('Los cambios no fueron guardados', '', 'info')
-        }
-    })
-})
 
 $("#respaldo").on("click",function(e){
     e.preventDefault();

@@ -1,7 +1,7 @@
 <?php
     namespace content\libraries\core; 
 
-class Encryption{
+class EncryptionAsimetrico{
     
     
 
@@ -38,13 +38,13 @@ class Encryption{
    
     }
     
-    public function enviarKeyPub(){
-        $publicKey = file_get_contents('https://joseviveresmarket.000webhostapp.com/publica.pem');
+    // public function enviarKeyPub(){
+    //     $publicKey = file_get_contents('https://joseviveresmarket.000webhostapp.com/publica.pem');
         
-        $response = json_encode($publicKey);
-        header('Content-Type: application/json');
-        echo $response;
-    }
+    //     $response = json_encode($publicKey);
+    //     header('Content-Type: application/json');
+    //     echo $response;
+    // }
 
     // public function encrypt($encrypted,$argv)
     // {
@@ -53,10 +53,18 @@ class Encryption{
     //     echo base64_encode($encrypted);
     // }
 
-    // public function decrypt($decrypted,$argv)
-    // {
-    //     $key = file_get_contents('private.pem');
-    //     openssl_private_decrypt(base64_decode($argv[1]), $decrypted, $key);
-    //     echo $decrypted;
-    // }
+    public function decrypt($base64EncodedText)
+    {
+        $privateKey = openssl_pkey_get_private(file_get_contents('https://joseviveresmarket.000webhostapp.com/privada.pem'));
+        
+        $decodedText = base64_decode($base64EncodedText);
+        openssl_private_decrypt($decodedText, $decryptedData, $privateKey);
+        //return $decryptedData;
+        if($decryptedData){
+           echo "paola";
+        }else{
+            echo "fallo";
+        }
+        
+    }
 }
